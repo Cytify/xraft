@@ -1,0 +1,2 @@
+add_executable(basic_reactor_test test_basic_reactor.cpp)
+target_link_libraries(basic_reactor_test xnet xlog xutil)
