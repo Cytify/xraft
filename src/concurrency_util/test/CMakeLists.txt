@@ -1,0 +1,8 @@
+add_executable(blocking_queue_test test_blocking_queue.cpp)
+target_link_libraries(blocking_queue_test xcon)
+
+add_executable(count_down_latch_test test_count_down_latch.cpp)
+target_link_libraries(count_down_latch_test xcon)
+
+add_executable(thread_pool_test test_thread_pool.cpp)
+target_link_libraries(thread_pool_test xcon)
