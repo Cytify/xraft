@@ -1,8 +1,8 @@
-#include "channel.h"
+#include "src/net/channel.h"
 
 #include <sys/poll.h>
 
-#include "event_loop.h"
+#include "src/net/event_loop.h"
 #include "src/log/logger.h"
 
 namespace xraft {
@@ -19,7 +19,7 @@ Channel::Channel(EventLoop* loop, int fd)
 
 void Channel::handle_event() {
     if (revents_ & POLLNVAL) {
-        // LOG_ERROR << "Channel::handle_event() POLLNVAL";
+        LOG_ERROR << "Channel::handle_event() POLLNVAL";
     }    
 
     if (revents_ & (POLLERR | POLLNVAL)) {

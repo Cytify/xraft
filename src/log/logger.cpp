@@ -1,4 +1,6 @@
-#include "logger.h"
+#include "src/log/logger.h"
+
+#include <stdio.h>
 
 #include "src/util/current_thread.h"
 
@@ -6,7 +8,7 @@ namespace xlog {
 
 __thread char t_time_str[64];
 
-__thread time_t t_last_second;
+__thread time_t t_last_second = 0;
 
 const char* log_level_name[Logger::NUM_LOG_LEVELS] = {
     "INFO  ",
@@ -15,7 +17,7 @@ const char* log_level_name[Logger::NUM_LOG_LEVELS] = {
 };
 
 void default_output_func(const char* msg, size_t len) {
-    fwrite(msg, 1, len, stdout);
+    fwrite(msg, len, 1, stdout);
 }
 
 Logger::OutputFunc g_output = default_output_func;
@@ -26,7 +28,7 @@ Logger::Logger(SourceFile file, int line, LogLevel level)
 
 Logger::~Logger() {
     impl_.finish();
-    const util::Buffer<util::kLargeBuffer>& buffer = stream().get_buffer();
+    const util::Buffer<util::kSmallBuffer>& buffer = stream().get_buffer();
     g_output(buffer.get_data(), buffer.get_length());
 }
 

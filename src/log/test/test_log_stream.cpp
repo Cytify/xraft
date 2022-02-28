@@ -6,7 +6,7 @@
 
 void test_bool() {
     xlog::LogStream s;
-    const util::Buffer<util::kLargeBuffer>& buf = s.get_buffer();
+    const util::Buffer<util::kSmallBuffer>& buf = s.get_buffer();
     assert(buf.to_string() == "");
     s << true;
     assert(buf.to_string() == "1");
@@ -18,7 +18,7 @@ void test_bool() {
 
 void test_integer() {
     xlog::LogStream s;
-    const util::Buffer<util::kLargeBuffer>& buf = s.get_buffer();
+    const util::Buffer<util::kSmallBuffer>& buf = s.get_buffer();
     assert(buf.to_string() == "");
     s << 1;
     assert(buf.to_string() == "1");
@@ -35,7 +35,7 @@ void test_integer() {
 
 void test_integer_limit() {
     xlog::LogStream s;
-    const util::Buffer<util::kLargeBuffer>& buf = s.get_buffer();
+    const util::Buffer<util::kSmallBuffer>& buf = s.get_buffer();
     assert(buf.to_string() == "");
 
     s << -2147483647;
@@ -107,7 +107,7 @@ void test_integer_limit() {
 
 void test_float() {
     xlog::LogStream s;
-    const util::Buffer<util::kLargeBuffer>& buf = s.get_buffer();
+    const util::Buffer<util::kSmallBuffer>& buf = s.get_buffer();
     assert(buf.to_string() == "");
 
     s << 0.0;
@@ -166,7 +166,7 @@ void test_float() {
 
 void test_string() {
     xlog::LogStream s;
-    const util::Buffer<util::kLargeBuffer>& buf = s.get_buffer();
+    const util::Buffer<util::kSmallBuffer>& buf = s.get_buffer();
     assert(buf.to_string() == "");
 
     s << "Hello ";
@@ -179,7 +179,7 @@ void test_string() {
 
 void test_long() {
     xlog::LogStream s;
-    const util::Buffer<util::kLargeBuffer>& buf = s.get_buffer();
+    const util::Buffer<util::kSmallBuffer>& buf = s.get_buffer();
     assert(buf.to_string() == "");
 
     for (int i = 0; i < 399 * 1000; ++i) {

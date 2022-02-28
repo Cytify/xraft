@@ -34,6 +34,8 @@ public:
     
     LogStream& operator<<(double);
     
+    LogStream& operator<<(const void*);
+
     LogStream& operator<<(float v) {
         return operator<<(static_cast<double>(v));
     }
@@ -66,7 +68,7 @@ public:
         buffer_.append(data, len); 
     }
 
-    const util::Buffer<util::kLargeBuffer>& get_buffer() const {
+    const util::Buffer<util::kSmallBuffer>& get_buffer() const {
         return buffer_; 
     }
 
@@ -78,7 +80,7 @@ private:
     // 一个数字字符串的最大长度
     static const int kMaxNumericSize = 48;
 
-    util::Buffer<util::kLargeBuffer> buffer_;
+    util::Buffer<util::kSmallBuffer> buffer_;
 
     template<typename T>
     void format_integer(T);

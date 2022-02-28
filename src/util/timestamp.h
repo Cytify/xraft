@@ -54,6 +54,31 @@ private:
     int64_t micro_seconds_since_epoch_;
 };
 
+inline Timestamp add_time(Timestamp timestamp, double seconds) {
+    int64_t delta = static_cast<int64_t>(seconds * Timestamp::kMicroSecondsPerSecond);
+    return Timestamp(timestamp.get_micro_seconds_since_epoch() + delta);
+}
+
+inline bool operator<(Timestamp lhs, Timestamp rhs) {
+    return lhs.get_micro_seconds_since_epoch() < rhs.get_micro_seconds_since_epoch();
+}
+
+inline bool operator<=(Timestamp lhs, Timestamp rhs) {
+    return lhs.get_micro_seconds_since_epoch() <= rhs.get_micro_seconds_since_epoch();
+}
+
+inline bool operator>(Timestamp lhs, Timestamp rhs) {
+    return rhs < lhs;
+}
+
+inline bool operator>=(Timestamp lhs, Timestamp rhs) {
+    return rhs <= lhs;
+}
+
+inline bool operator==(Timestamp lhs, Timestamp rhs) {
+    return lhs.get_micro_seconds_since_epoch() == rhs.get_micro_seconds_since_epoch();
+}
+
 }
 
 #endif

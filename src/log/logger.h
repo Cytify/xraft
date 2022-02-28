@@ -1,7 +1,7 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#include "log_stream.h"
+#include "src/log/log_stream.h"
 #include "src/util/noncopyable.h"
 #include "src/util/timestamp.h"
 

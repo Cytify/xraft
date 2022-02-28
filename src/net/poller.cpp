@@ -1,8 +1,8 @@
-#include "poller.h"
+#include "src/net/poller.h"
 
 #include <assert.h>
 
-#include "channel.h"
+#include "src/net/channel.h"
 #include "src/log/logger.h"
 
 namespace xraft {
@@ -20,12 +20,12 @@ util::Timestamp Poller::poll(int timeout_ms, ChannelList* activate_channels) {
     int event_num = ::poll(&*poll_fds_.begin(), poll_fds_.size(), timeout_ms);
     util::Timestamp now(util::Timestamp::now());
     if (event_num > 0) {
-        // LOG_INFO << event_num << " events happended";
+        LOG_INFO << event_num << " events happended";
         fill_activate_channels(event_num, activate_channels);
     } else if (event_num == 0) {
-        // LOG_INFO << "nothing happended";
+        LOG_INFO << "nothing happended";
     } else {
-        // LOG_ERROR << "Poller::poll()";
+        LOG_ERROR << "Poller::poll()";
     }
 
     return now;

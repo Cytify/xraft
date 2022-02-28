@@ -1,4 +1,4 @@
-#include "current_thread.h"
+#include "src/util/current_thread.h"
 
 #include <sys/syscall.h>
 #include <unistd.h>

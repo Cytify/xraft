@@ -1,4 +1,4 @@
-#include "log_stream.h"
+#include "src/log/log_stream.h"
 
 #include <algorithm>
 
@@ -8,13 +8,15 @@ namespace xlog {
 const char digits[] = "9876543210123456789";
 const char* zero = digits + 9;
 
+const char digits_hex[] = "0123456789ABCDEF";
+
 template<typename T>
 size_t convert(char* buf, T value) {
     T i = value;
     char* p = buf;
 
     do {
-        int lsd = i % 10;
+        int lsd = static_cast<int>(i % 10);
         i /= 10;
         *p++ = zero[lsd];
     } while (i != 0);
@@ -22,6 +24,22 @@ size_t convert(char* buf, T value) {
     if (value < 0) {
         *p++ = '-';
     }
+    *p = '\0';
+    std::reverse(buf, p);
+
+    return p - buf;
+}
+
+size_t convert_hex(char* buf, uintptr_t value) {
+    uintptr_t i = value;
+    char* p = buf;
+
+    do {
+        int lsd = static_cast<int>(i % 16);
+        i /= 16;
+        *p++ = digits_hex[lsd];
+    } while (i != 0);
+    
     *p = '\0';
     std::reverse(buf, p);
 
@@ -79,6 +97,18 @@ LogStream& LogStream::operator<<(double v) {
     if (buffer_.avail() > kMaxNumericSize) {
         size_t len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v);
         buffer_.add(len);
+    }
+    return *this;
+}
+
+LogStream& LogStream::operator<<(const void* p) {
+    uintptr_t v = reinterpret_cast<uintptr_t>(p);
+    if (buffer_.avail() >= kMaxNumericSize) {
+        char* buf = buffer_.current();
+        buf[0] = '0';
+        buf[1] = 'x';
+        size_t len = convert_hex(buf + 2, v);
+        buffer_.add(len + 2);
     }
     return *this;
 }

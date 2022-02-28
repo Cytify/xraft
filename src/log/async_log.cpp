@@ -1,6 +1,6 @@
-#include "async_log.h"
+#include "src/log/async_log.h"
 
-#include "log_file.h"
+#include "src/log/log_file.h"
 #include "src/util/timestamp.h"
 
 namespace xlog {
