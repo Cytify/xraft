@@ -21,7 +21,7 @@ public:
 
     Channel(EventLoop* loop, int fd);
 
-    ~Channel() = default;
+    ~Channel();
 
     // 核心，根据revents，执行对应回调
     void handle_event();
@@ -36,6 +36,10 @@ public:
 
     void set_error_callback(const EventCallback& cb) {
         error_callback_ = cb;
+    }
+
+    void set_close_callback(const EventCallback& cb) {
+        close_callback_ = cb;
     }
 
     int get_fd() const {
@@ -102,6 +106,9 @@ private:
     EventCallback read_callback_;
     EventCallback write_callback_;
     EventCallback error_callback_;
+    EventCallback close_callback_;
+
+    bool event_handling_;
 };
 
 }

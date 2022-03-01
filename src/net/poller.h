@@ -32,6 +32,8 @@ public:
     // 修改感兴趣的IO事件
     void update_channel(Channel* channel);
 
+    void remove_channel(Channel* channel);
+
     void assert_in_loop_thread() {
         owner_loop_->assert_in_loop_thread();
     }

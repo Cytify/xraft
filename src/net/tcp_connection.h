@@ -25,6 +25,9 @@ public:
     // 接收到tcp连接时调用，只调用一次
     void connect_established();
 
+    // tcp server从其map中移除时，调用
+    void connect_destroyed();
+
     EventLoop* get_loop() const {
         return loop_;
     }
@@ -53,10 +56,15 @@ public:
         msg_callback_ = cb;
     }
 
+    void set_close_callback(const CloseCallback& cb) {
+        close_callback_ = cb;
+    }
+
 private:
     enum State {
         Connecting,
         Connected,
+        Disconnected,
     };
 
     void set_state(State s) {
@@ -64,6 +72,9 @@ private:
     }
 
     void handle_read();
+    void handle_write();
+    void handle_close();
+    void handle_error();
 
     EventLoop* loop_;
     std::string name_;
@@ -72,8 +83,11 @@ private:
     std::shared_ptr<Channel> channel_;
     InetAddress local_addr_;
     InetAddress peer_addr_;
+
     ConnectionCallback conn_callback_;
     MessageCallback msg_callback_;
+    CloseCallback close_callback_;
+    
 };
 
 using TcpConnectionPtr = std::shared_ptr<TcpConnection>;

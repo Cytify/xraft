@@ -2,6 +2,7 @@
 
 #include <stdio.h>  // snprintf
 #include <string>
+#include <assert.h>
 
 #include "src/log/logger.h"
 #include "src/net/event_loop.h"
@@ -31,6 +32,13 @@ void TcpServer::start() {
     }
 }   
 
+void TcpServer::remove_connection(const TcpConnectionPtr& conn) {
+    loop_->assert_in_loop_thread();
+    LOG_INFO << "TcpServer::remove_connection [" << name_ << "] - connection " << conn->get_name();
+    size_t n = connections_.erase(conn->get_name());
+    assert(n == 1);
+    loop_->queue_in_loop(std::bind(&TcpConnection::connect_destroyed, this));
+}
 
 void TcpServer::new_connection(int sockfd, const InetAddress& peer_addr) {
     loop_->assert_in_loop_thread();
@@ -47,6 +55,7 @@ void TcpServer::new_connection(int sockfd, const InetAddress& peer_addr) {
     connections_[conn_name] = conn;
     conn->set_connection_callback(conn_callback_);
     conn->set_message_callback(msg_callback_);
+    conn->set_close_callback(std::bind(&TcpServer::remove_connection, this, std::placeholders::_1));
     conn->connect_established();
 }
 

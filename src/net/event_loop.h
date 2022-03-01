@@ -41,6 +41,8 @@ public:
 
     void update_channel(Channel* channel);
 
+    void remove_channel(Channel* channel);
+
     // 对其他线程提供了一个线程安全的调用方法
     void run_in_loop(Functor cb);
 

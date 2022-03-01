@@ -97,6 +97,12 @@ void EventLoop::update_channel(Channel* channel) {
     poller_->update_channel(channel);
 }
 
+void EventLoop::remove_channel(Channel* channel) {
+    assert(channel->onwer_loop() == this);
+    assert_in_loop_thread();
+    poller_->remove_channel(channel);
+}
+
 void EventLoop::run_in_loop(Functor cb) {
     if (is_in_loop_thread()) {
         cb();

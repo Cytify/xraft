@@ -47,6 +47,8 @@ void from_host_port(const char* ip, uint16_t port, struct sockaddr_in* addr);
 
 struct sockaddr_in get_local_addr(int sockfd);
 
+int get_socket_error(int sockfd);
+
 }
 }
 
