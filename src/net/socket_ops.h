@@ -45,6 +45,7 @@ void to_host_port(char* buf, size_t len, const struct sockaddr_in& addr);
 
 void from_host_port(const char* ip, uint16_t port, struct sockaddr_in* addr);
 
+struct sockaddr_in get_local_addr(int sockfd);
 
 }
 }

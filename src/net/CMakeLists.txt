@@ -9,6 +9,8 @@ set(net_SRCS
     inet_address.cpp
     socket_ops.cpp
     socket.cpp
+    tcp_connection.cpp
+    tcp_server.cpp
 )
 
 add_library(xnet ${net_SRCS})
@@ -28,6 +30,9 @@ set(HEADERS
     inet_address.h
     socket_ops.h
     socket.h
+    callback.h
+    tcp_connection.h
+    tcp_server.h
 )
 install(FILES ${HEADERS} DESTINATION include/xraft/net)
 

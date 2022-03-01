@@ -9,6 +9,7 @@ namespace net {
 
 class InetAddress {
 public:
+    // for server listen addr
     explicit InetAddress(uint16_t port);
 
     InetAddress(const std::string& ip, uint16_t port);

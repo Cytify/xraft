@@ -10,7 +10,7 @@
 
 #include "src/util/noncopyable.h"
 #include "src/net/timer_id.h"
-#include "src/net/callback.cpp"
+#include "src/net/callback.h"
 #include "src/net/timer_queue.h"
 
 namespace xraft {

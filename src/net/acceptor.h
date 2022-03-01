@@ -25,7 +25,7 @@ public:
         return listenning_;
     }
 
-    bool set_new_conn_callback(const NewConnCallback& cb) {
+    void set_new_conn_callback(const NewConnCallback& cb) {
         new_conn_callback_ = cb;
     }
 

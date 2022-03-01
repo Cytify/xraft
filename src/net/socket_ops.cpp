@@ -86,5 +86,15 @@ void from_host_port(const char* ip, uint16_t port, struct sockaddr_in* addr) {
     }
 }
 
+struct sockaddr_in get_local_addr(int sockfd) {
+    struct sockaddr_in local_addr;
+    bzero(&local_addr, sizeof(local_addr));
+    socklen_t addr_len = sizeof(local_addr);
+    if (getsockname(sockfd, sockaddr_cast(&local_addr), &addr_len) < 0) {
+        LOG_ERROR << "sockets::get_local_addr";
+    }
+    return local_addr;
+}
+
 }
 }

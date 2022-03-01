@@ -5,7 +5,7 @@
 
 #include "src/util/noncopyable.h"
 #include "src/util/timestamp.h"
-#include "src/net/callback.cpp"
+#include "src/net/callback.h"
 
 namespace xraft {
 namespace net {

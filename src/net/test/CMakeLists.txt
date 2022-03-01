@@ -9,3 +9,6 @@ target_link_libraries(event_loop_thread_test xnet xlog xutil)
 
 add_executable(acceptor_test test_acceptor.cpp)
 target_link_libraries(acceptor_test xnet xlog xutil)
+
+add_executable(tcp_server_test test_tcp_server.cpp)
+target_link_libraries(tcp_server_test xnet xlog xutil)
