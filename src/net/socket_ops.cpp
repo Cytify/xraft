@@ -107,5 +107,11 @@ int get_socket_error(int sockfd) {
     }
 }
 
+void shutdown_write(int sockfd) {
+    if (shutdown(sockfd, SHUT_WR) < 0) {
+        LOG_ERROR << "sockets::shutdown_write";
+    }
+}
+
 }
 }

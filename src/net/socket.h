@@ -14,6 +14,10 @@ public:
 
     ~Socket();
 
+    int get_fd() const {
+        return sockfd_;
+    }
+
     // 如果地址被使用，abort
     void bind_address(const InetAddress& addr);
 
@@ -29,9 +33,9 @@ public:
     // Enable/disable SO_REUSEADDR
     void set_reuse_addr(bool on);
 
-    int get_fd() const {
-        return sockfd_;
-    }
+    void shutdown_write();
+
+    void set_tcp_no_delay(bool on);
 
 private:
     const int sockfd_;

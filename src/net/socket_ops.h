@@ -49,6 +49,8 @@ struct sockaddr_in get_local_addr(int sockfd);
 
 int get_socket_error(int sockfd);
 
+void shutdown_write(int sockfd);
+
 }
 }
 

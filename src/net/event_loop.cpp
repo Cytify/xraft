@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <sys/eventfd.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "src/util/current_thread.h"
 #include "src/log/async_log.h"
@@ -29,7 +30,16 @@ int create_event_fd() {
     return event_fd;
 }
 
+class IgnoreSigPipe {
+public:
+    IgnoreSigPipe() {
+        signal(SIGPIPE, SIG_IGN);
+    }
+};
+
 }
+
+IgnoreSigPipe init_signal;
 
 EventLoop::EventLoop() : 
     thread_id_(util::current_thread::get_tid()), looping_(false),
@@ -62,10 +72,10 @@ void EventLoop::loop() {
     // pool or epoll
     while (!quit_) {
         active_channels_.clear();
-        poller_->poll(kPollTimeMs, &active_channels_);
+        poll_return_time_ = poller_->poll(kPollTimeMs, &active_channels_);
 
         for (ChannelList::iterator iter = active_channels_.begin(), end = active_channels_.end(); iter != end; ++iter) {
-            (*iter)->handle_event();    // 监听到事件发生，执行用户回调
+            (*iter)->handle_event(poll_return_time_);    // 监听到事件发生，执行用户回调
         }
         do_pending_functors();
     }

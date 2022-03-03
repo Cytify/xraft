@@ -6,6 +6,8 @@
 #include "src/util/noncopyable.h"
 #include "src/net/callback.h"
 #include "src/net/inet_address.h"
+#include "src/net/buffer.h"
+#include "src/util/timestamp.h"
 
 namespace xraft {
 namespace net {
@@ -60,10 +62,21 @@ public:
         close_callback_ = cb;
     }
 
+    void set_write_complete_callback(const WriteCompleteCallback& cb) {
+        write_complete_callback_ = cb;
+    }
+
+    void send(const std::string& message);
+
+    void shutdown();
+
+    void set_tcp_no_delay(bool on);
+
 private:
     enum State {
         Connecting,
         Connected,
+        Disconnecting,
         Disconnected,
     };
 
@@ -71,10 +84,13 @@ private:
         state_ = s;
     }
 
-    void handle_read();
+    void handle_read(util::Timestamp receive_time);
     void handle_write();
     void handle_close();
     void handle_error();
+
+    void send_in_loop(const std::string& message);
+    void shutdown_in_loop();
 
     EventLoop* loop_;
     std::string name_;
@@ -87,7 +103,10 @@ private:
     ConnectionCallback conn_callback_;
     MessageCallback msg_callback_;
     CloseCallback close_callback_;
-    
+    WriteCompleteCallback write_complete_callback_;         // 低水位回调
+
+    Buffer input_buffer_;
+    Buffer output_buffer_;
 };
 
 using TcpConnectionPtr = std::shared_ptr<TcpConnection>;

@@ -1,5 +1,5 @@
-#ifndef BUFFER_H_
-#define BUFFER_H_
+#ifndef FIXED_BUFFER_H_
+#define FIXED_BUFFER_H_
 
 #include <string.h>
 #include <string>

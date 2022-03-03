@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "src/util/noncopyable.h"
+#include "src/util/timestamp.h"
 
 namespace xraft {
 namespace net {
@@ -18,15 +19,16 @@ class EventLoop;
 class Channel : util::Noncopyable {
 public:
     using EventCallback = std::function<void()>;
+    using ReadEventCallback = std::function<void(util::Timestamp)>;
 
     Channel(EventLoop* loop, int fd);
 
     ~Channel();
 
     // 核心，根据revents，执行对应回调
-    void handle_event();
+    void handle_event(util::Timestamp receive_time);
 
-    void set_read_callback(const EventCallback& cb) {
+    void set_read_callback(const ReadEventCallback& cb) {
         read_callback_ = cb;
     }
 
@@ -90,6 +92,10 @@ public:
         return loop_;
     }
 
+    bool is_writing() const {
+        return events_ & kWriteEvent;
+    }
+
 private:
     void update();
 
@@ -103,7 +109,7 @@ private:
     int revents_;
     int index_;             // poller以vector形式存储channel，在这里记住下标
 
-    EventCallback read_callback_;
+    ReadEventCallback read_callback_;
     EventCallback write_callback_;
     EventCallback error_callback_;
     EventCallback close_callback_;

@@ -38,5 +38,14 @@ void Socket::set_reuse_addr(bool on) {
     setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
 }
 
+void Socket::shutdown_write() {
+    xraft::sockets::shutdown_write(sockfd_);
+}
+
+void Socket::set_tcp_no_delay(bool on) {
+    int optval = on ? 1 : 0;
+    setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY, &optval, sizeof(optval));
+}
+
 }
 }

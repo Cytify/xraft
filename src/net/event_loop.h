@@ -56,6 +56,10 @@ public:
 
     TimerId run_every(double interval, TimerCallback cb);
 
+    util::Timestamp get_poll_return_time() const {
+        return poll_return_time_;
+    }
+
 private:
     using ChannelList = std::vector<Channel*>;
 
@@ -76,6 +80,7 @@ private:
     std::unique_ptr<Channel> wakeup_channel_;
     std::mutex mutex_;
     std::vector<Functor> pending_functors_;
+    util::Timestamp poll_return_time_;
 };
 
 }

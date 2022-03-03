@@ -9,8 +9,8 @@
 
 xraft::net::EventLoop* g_loop;
 
-void timeout() {
-    printf("Timeout\n");
+void timeout(util::Timestamp receive_time) {
+    printf("%s Timeout!\n", receive_time.to_format_string().c_str());
     g_loop->quit();
 }
 
