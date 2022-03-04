@@ -22,8 +22,6 @@ public:
     // 启动服务器
     void start();
 
-    void remove_connection(const TcpConnectionPtr& conn);
-
     void set_connection_callback(const ConnectionCallback& cb) {
         conn_callback_ = cb;
     }

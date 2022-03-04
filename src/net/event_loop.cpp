@@ -154,6 +154,10 @@ TimerId EventLoop::run_every(double interval, TimerCallback cb) {
     return timer_queue_->add_timer(cb, time, interval);
 }
 
+void EventLoop::cancel(TimerId timer_id) {
+    timer_queue_->cancel(timer_id);
+}
+
 void EventLoop::abort_not_in_loop_thread() {
     LOG_ERROR << "EventLoop::abortNotInLoopThread - EventLoop " << this
               << " was created in threadId_ = " << thread_id_

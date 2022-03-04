@@ -3,6 +3,7 @@
 
 #include <set>
 #include <vector>
+#include <atomic>
 
 #include "src/util/noncopyable.h"
 #include "src/util/timestamp.h"
@@ -34,11 +35,15 @@ private:
      */
     using Entry = std::pair<util::Timestamp, Timer*>;
     using TimerList = std::set<Entry>;
+    using ActiveTimer = std::pair<Timer*, int64_t>;
+    using ActiveTimerSet = std::set<ActiveTimer>;
 
     // 当timerfd到期时，被调用
     void handle_read();
 
     void add_timer_in_loop(Timer* timer);
+
+    void cancel_in_loop(TimerId timer_id);
 
     // 获取到期的timer
     std::vector<Entry> get_expired(util::Timestamp now);
@@ -51,6 +56,10 @@ private:
     EventLoop* loop_;
     Channel timerfd_channel_;
     TimerList timers_;
+
+    std::atomic_bool calling_expired_timers_;
+    ActiveTimerSet active_timers_;
+    ActiveTimerSet canceling_timers_;
 };
 
 

@@ -40,14 +40,6 @@ void TcpServer::set_thread_num(int thread_num) {
     thread_pool_->set_thread_num(thread_num);
 }
 
-void TcpServer::remove_connection(const TcpConnectionPtr& conn) {
-    loop_->assert_in_loop_thread();
-    LOG_INFO << "TcpServer::remove_connection [" << name_ << "] - connection " << conn->get_name();
-    size_t n = connections_.erase(conn->get_name());
-    assert(n == 1);
-    loop_->queue_in_loop(std::bind(&TcpConnection::connect_destroyed, conn));
-}
-
 void TcpServer::new_connection(int sockfd, const InetAddress& peer_addr) {
     loop_->assert_in_loop_thread();
     char buf[32];

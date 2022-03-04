@@ -13,6 +13,9 @@ set(net_SRCS
     tcp_server.cpp
     buffer.cpp
     event_loop_thread_pool.cpp
+    connector.cpp
+    tcp_client.cpp
+    epoller.cpp
 )
 
 add_library(xnet ${net_SRCS})
@@ -37,6 +40,9 @@ set(HEADERS
     tcp_server.h
     buffer.h
     event_loop_thread_pool.h
+    connector.h
+    tcp_client.h
+    epoller.h
 )
 install(FILES ${HEADERS} DESTINATION include/xraft/net)
 

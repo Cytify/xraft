@@ -91,10 +91,21 @@ struct sockaddr_in get_local_addr(int sockfd) {
     bzero(&local_addr, sizeof(local_addr));
     socklen_t addr_len = sizeof(local_addr);
     if (getsockname(sockfd, sockaddr_cast(&local_addr), &addr_len) < 0) {
-        LOG_ERROR << "sockets::get_local_addr";
+        LOG_ERROR << "xraft::sockets::get_local_addr";
     }
     return local_addr;
 }
+
+struct sockaddr_in get_peer_addr(int sockfd) {
+    struct sockaddr_in peer_addr;
+    bzero(&peer_addr, sizeof(peer_addr));
+    socklen_t addr_len = sizeof(peer_addr);
+    if (getpeername(sockfd, sockaddr_cast(&peer_addr), &addr_len) < 0) {
+        LOG_ERROR << "xraft::sockets::get_peer_addr";
+    }
+    return peer_addr;
+}
+
 
 int get_socket_error(int sockfd) {
     int optval;
@@ -111,6 +122,18 @@ void shutdown_write(int sockfd) {
     if (shutdown(sockfd, SHUT_WR) < 0) {
         LOG_ERROR << "sockets::shutdown_write";
     }
+}
+
+int connect(int sockfd, const struct sockaddr_in& addr) {
+    return ::connect(sockfd, sockaddr_cast(&addr), sizeof(addr));
+}
+
+bool is_self_connect(int sockfd) {
+    struct sockaddr_in local_addr = get_local_addr(sockfd);
+    struct sockaddr_in peer_addr = get_peer_addr(sockfd);
+
+    return local_addr.sin_addr.s_addr == peer_addr.sin_addr.s_addr &&
+           local_addr.sin_port == peer_addr.sin_port;
 }
 
 }

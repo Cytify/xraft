@@ -47,9 +47,15 @@ void from_host_port(const char* ip, uint16_t port, struct sockaddr_in* addr);
 
 struct sockaddr_in get_local_addr(int sockfd);
 
+struct sockaddr_in get_peer_addr(int sockfd);
+
 int get_socket_error(int sockfd);
 
 void shutdown_write(int sockfd);
+
+int connect(int sockfd, const struct sockaddr_in& addr);
+
+bool is_self_connect(int sockfd);
 
 }
 }

@@ -21,3 +21,9 @@ target_link_libraries(echo_shutdown_server_test xnet xlog xutil)
 
 add_executable(write_complete_cb_test test_write_complete_cb.cpp)
 target_link_libraries(write_complete_cb_test xnet xlog xutil)
+
+add_executable(connector_test test_connector.cpp)
+target_link_libraries(connector_test xnet xlog xutil)
+
+add_executable(tcp_client_test test_tcp_client.cpp)
+target_link_libraries(tcp_client_test xnet xlog xutil)

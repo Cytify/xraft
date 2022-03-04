@@ -30,7 +30,11 @@ public:
     EventLoop();
 
     ~EventLoop();
-
+        
+    util::Timestamp get_poll_return_time() const {
+        return poll_return_time_;
+    }
+    
     void loop();
 
     void quit();
@@ -56,9 +60,7 @@ public:
 
     TimerId run_every(double interval, TimerCallback cb);
 
-    util::Timestamp get_poll_return_time() const {
-        return poll_return_time_;
-    }
+    void cancel(TimerId timer_id);
 
 private:
     using ChannelList = std::vector<Channel*>;
