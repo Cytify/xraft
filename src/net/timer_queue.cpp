@@ -67,7 +67,7 @@ TimerQueue::TimerQueue(EventLoop* loop)
 
 TimerQueue::~TimerQueue() {
     timerfd_channel_.disable_all();
-//    timerfd_channel_.remove()
+    // timerfd_channel_.remove()
     close(timerfd_);
     for (const Entry& timer : timers_) {
         delete timer.second;
@@ -125,6 +125,7 @@ void TimerQueue::add_timer_in_loop(Timer* timer) {
 }
 
 std::vector<TimerQueue::Entry> TimerQueue::get_expired(util::Timestamp now) {
+    assert(timers_.size() == active_timers_.size());
     std::vector<Entry> expired;
     Entry entry = std::make_pair(now, reinterpret_cast<Timer*>(UINTPTR_MAX));
     /**
@@ -137,6 +138,13 @@ std::vector<TimerQueue::Entry> TimerQueue::get_expired(util::Timestamp now) {
     assert(iter == timers_.end() || now < iter->first);
     std::copy(timers_.begin(), iter, std::back_inserter(expired));
     timers_.erase(timers_.begin(), iter);
+
+    for (const Entry& entry : expired) {
+        ActiveTimer timer(entry.second, entry.second->get_sequence());
+        size_t n = active_timers_.erase(timer);
+        assert(n == 1);
+    }
+    assert(timers_.size() == active_timers_.size());
 
     return expired;
 }
@@ -164,6 +172,8 @@ void TimerQueue::reset(const std::vector<Entry>& expired, util::Timestamp now) {
 }
 
 bool TimerQueue::insert(Timer* timer) {
+    loop_->assert_in_loop_thread();
+    assert(timers_.size() == active_timers_.size());
     bool earliest_changed = false;
     util::Timestamp when = timer->get_expiration();
     TimerList::iterator iter = timers_.begin();
@@ -172,9 +182,17 @@ bool TimerQueue::insert(Timer* timer) {
         earliest_changed = true;
     }
 
-    std::pair<TimerList::iterator, bool> result = timers_.insert(std::make_pair(when, timer));
-    assert(result.second);
+    {
+        std::pair<TimerList::iterator, bool> result = timers_.insert(std::make_pair(when, timer));
+        assert(result.second);
+    }
 
+    {
+        std::pair<ActiveTimerSet::iterator, bool> result = active_timers_.insert(ActiveTimer(timer, timer->get_sequence()));
+        assert(result.second);
+    }
+
+    assert(timers_.size() == active_timers_.size());
     return earliest_changed;
 }
 

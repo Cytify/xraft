@@ -37,6 +37,7 @@ public:
     void set_thread_num(int thread_num);
 
 private:
+    // 新连接到来时调用
     void new_connection(int sockfd, const InetAddress& peer_addr);
 
     void remove_connection(const TcpConnectionPtr& conn);

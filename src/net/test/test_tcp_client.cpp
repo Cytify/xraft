@@ -30,7 +30,7 @@ void on_message(const xraft::net::TcpConnectionPtr& conn, xraft::net::Buffer* bu
 
 int main() {
     xraft::net::EventLoop loop;
-    xraft::net::InetAddress server_addr("localhose", 9981);
+    xraft::net::InetAddress server_addr("localhost", 9981);
     xraft::net::TcpClient client(&loop, server_addr);
 
     client.set_connection_callback(on_connection);

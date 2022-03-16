@@ -79,11 +79,11 @@ void Poller::remove_channel(Channel* channel) {
     if (static_cast<size_t> (index) == poll_fds_.size() - 1) {
         poll_fds_.pop_back();
     } else {
-        // 交换最后一个元素与带删除元素，pop_back
+        // 交换最后一个元素与待删除元素，pop_back
         int channel_at_end = poll_fds_.back().fd;
         std::iter_swap(poll_fds_.begin() + index, poll_fds_.end() - 1);
         if (channel_at_end < 0) {
-            channel_at_end = -channel_at_end - 1;
+            channel_at_end = -channel_at_end - 1;        // ? 为什么这么操作
         }
         channels_[channel_at_end]->set_index(index);
         poll_fds_.pop_back();

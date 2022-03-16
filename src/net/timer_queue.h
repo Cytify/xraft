@@ -23,6 +23,7 @@ public:
 
     ~TimerQueue();
 
+    // for eventloop use
     TimerId add_timer(TimerCallback cb, util::Timestamp when, double interval);
 
     void cancel(TimerId timer_id);
@@ -57,6 +58,7 @@ private:
     Channel timerfd_channel_;
     TimerList timers_;
 
+    // for cancel timer
     std::atomic_bool calling_expired_timers_;
     ActiveTimerSet active_timers_;
     ActiveTimerSet canceling_timers_;

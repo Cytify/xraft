@@ -35,6 +35,7 @@ public:
         return poll_return_time_;
     }
     
+    // 核心函数，负责所有IO事件的分发
     void loop();
 
     void quit();
@@ -54,12 +55,10 @@ public:
 
     void wakeup();
 
+    // 定时任务用
     TimerId run_at(util::Timestamp time, TimerCallback cb);
-
     TimerId run_after(double delay, TimerCallback cb);
-
     TimerId run_every(double interval, TimerCallback cb);
-
     void cancel(TimerId timer_id);
 
 private:

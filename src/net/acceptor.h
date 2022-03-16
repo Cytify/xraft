@@ -30,6 +30,7 @@ public:
     }
 
 private:
+    // listen到新连接来临，调用handle_read回调
     void handle_read();
 
     EventLoop* loop_;
